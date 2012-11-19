@@ -1,5 +1,7 @@
-SF Muni Visualization
+[SF Muni Visualization](http://philz.github.com/muni)
 =====================
+
+See it live at http://philz.github.com/muni.
 
 I set out to learn [D3](http://d3js.org/) and to answer the eternal Muni question, "Is the J/N train backed up in the tunnel?"
 I'm still wondering about the N/J, but here we go.
