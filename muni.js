@@ -52,27 +52,33 @@ function drawmuni(munidata) {
   vehicles = munidata.getElementsByTagName('vehicle');
 
   vehPoints = munivis.selectAll(".vehPoint").data(vehicles, vehid);
+  var triangle = d3.svg.symbol().type("triangle-up");
+  var translation = function(d) {
+    return "translate(" + longscale(d.getAttribute("lon")) + "," + latscale(d.getAttribute("lat")) + ")" +
+           "rotate(" + d.getAttribute("heading") + ")" +
+           "scale(1.3,2.4)" +
+           "translate(0,-3)"; // stick it in the tail of the triangle
+  };
   vehPoints.transition().duration(TRANSITION_DELAY)
-         .attr("cy", function(d, i) { return latscale(d.getAttribute("lat")); })
-         .attr("cx", function(d, i) { return longscale(d.getAttribute("lon")); })
          .attr("fill", function(d) {
 		var tag = d.getAttribute("routeTag");
 		return muniColors[tag] || "rgb(124,240,13)"
 	 })
-         .attr("r", 9);
+         .attr("transform", translation)
   vehPoints.enter()
-      .append("svg:circle")
+      .append("svg:path")
          .attr("class", "vehPoint")
-         .attr("cy", function(d, i) { return latscale(d.getAttribute("lat")); })
-         .attr("cx", function(d, i) { return longscale(d.getAttribute("lon")); })
+         .attr("transform", translation)
+         .attr("d", triangle)
          .attr("fill", function(d) {
 		var tag = d.getAttribute("routeTag");
 		return muniColors[tag] || "rgb(124,240,13)"
 	 })
-         .attr("opacity", 0.5)
-         .attr("r", 0).transition().duration(TRANSITION_DELAY).attr("r", 9);
+         .attr("opacity", 0.0)
+         .transition().duration(TRANSITION_DELAY)
+         .attr("opacity", 0.5);
   vehPoints.exit().transition().duration(TRANSITION_DELAY)
-	.attr("r", 0)
+	.attr("opacity", 0.0)
 	.remove();
 
   vehLabels = munivis.selectAll(".vehLabel").data(vehicles, vehid);
