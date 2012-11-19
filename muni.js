@@ -94,12 +94,11 @@ function drawmuni(munidata) {
   vehLabels.exit().transition().duration(TRANSITION_DELAY)
          .attr("font-size", "0px")
          .remove();
-
-  // Reload muni data every 15s
-  setInterval(function() {
-	d3.xml('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni&t=0', drawmuni);
-  }, 15000);
 }
 
-d3.xml('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni&t=0', drawmuni);
 d3.json('stclines_arterial.geojson', drawmap);
+d3.xml('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni&t=0', drawmuni);
+// Reload muni data every 15s
+setInterval(function() {
+		d3.xml('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni&t=0', drawmuni);
+}, 15000);
