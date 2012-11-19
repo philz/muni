@@ -1,8 +1,5 @@
 var TRANSITION_DELAY = 3000;
 
-var munidata;
-var sfarterial;
-
 var muniColors = {
 	'F': d3.rgb(223, 99, 98),
 	'J': d3.rgb(197, 84, 39),
@@ -13,35 +10,20 @@ var muniColors = {
 	'T': d3.rgb(216, 31, 38)
 };
 
-// The queue() in http://bl.ocks.org/4060606 seems super nice,
-// but doesn't work given the expectations.  This stupidly
-// waits for both callbacks.  Probably
-// http://api.jquery.com/category/deferred-object/ is the right way to do this.
-var cb1 = function(x) {
-        munidata = x;
-        if (sfarterial) {
-                go(munidata, sfarterial);
-        }
-};
-var cb2 = function(x) {
-        sfarterial = x;
-        if (munidata) {
-                go(munidata, sfarterial);
-        }
-}
-
-d3.xml('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni&t=0', cb1);
-d3.json('stclines_arterial.geojson', cb2);
 
 // Returns id of a vehicle; used for data joins.
 function vehid(d) {
   return d.getAttribute("id");
 }
 
-
 // Setup SVG divs for ourselves.
 var w = 1200,
     h = 1200;
+// Project linearly from lat/long to x/y.  Theoretically we should
+// be doing this non-linearly, but the area is small here.  We should
+// also be adjusting w/h appropriately.
+var latscale = d3.scale.linear().domain([37.815, 37.690]).range([0, w]);
+var longscale = d3.scale.linear().domain([-122.520, -122.370]).range([0, h]);
 var vis = d3.select("#map")
   .append("svg:svg")
   .attr("width", w)
@@ -49,13 +31,7 @@ var vis = d3.select("#map")
 var mapvis = vis.append("svg:g");
 var munivis = vis.append("svg:g");
 
-function go(munidata, sfarterial) {
-  // Project linearly from lat/long to x/y.  Theoretically we should
-  // be doing this non-linearly, but the area is small here.  We should
-  // also be adjusting w/h appropriately.
-  var latscale = d3.scale.linear().domain([37.815, 37.690]).range([0, w]);
-  var longscale = d3.scale.linear().domain([-122.520, -122.370]).range([0, h]);
-
+function drawmap(sfarterial) {
   // Draw base map of san francisco (the arterials)
   var path = d3.geo.path();
   path.projection(function linear(coordinates) { 
@@ -69,7 +45,9 @@ function go(munidata, sfarterial) {
   feature.attr("fill-opacity", 0.5);
   feature.attr("stroke", "#222")
   feature.attr("d", path);
+}
 
+function drawmuni(munidata) {
   // Draw muni data
   vehicles = munidata.getElementsByTagName('vehicle');
 
@@ -119,6 +97,9 @@ function go(munidata, sfarterial) {
 
   // Reload muni data every 15s
   setInterval(function() {
-    d3.xml('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni&t=0', cb1);
+	d3.xml('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni&t=0', drawmuni);
   }, 15000);
 }
+
+d3.xml('http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=sf-muni&t=0', drawmuni);
+d3.json('stclines_arterial.geojson', drawmap);
