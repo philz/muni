@@ -1,11 +1,13 @@
-h1. SF Muni Visualization
+SF Muni Visualization
+=====================
 
-I set out to learn [D3|http://d3js.org/] and to answer the eternal Muni question, "Is the J/N train backed up in the tunnel?"
+I set out to learn [D3](http://d3js.org/) and to answer the eternal Muni question, "Is the J/N train backed up in the tunnel?"
 I'm still wondering about the N/J, but here we go.
 
-h2. The Muni Data
+The Muni Data
+-------------
 
-[Nextbus's API|http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf] lets you grab data that looks like
+[Nextbus's API](http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf) lets you grab data that looks like
 
 
 	<?xml version="1.0" encoding="utf-8" ?> 
@@ -18,14 +20,15 @@ h2. The Muni Data
 
 Grabbing this was fairly straight-forward.
 
-h2. The Map Data
+The Map Data
+------------
 
 The muni data just by itself implies a map of San Francisco (that is, unless
 you got the coordinates reversed and upside down...), but it's nicer to plot a
 map first.  Using OpenStreetView or Google Maps is cheating, so I grabbed
 grabbed the arterial streets of San Francisco shapefile from
-[data.sfgov.org|https://data.sfgov.org/Geography/Arterial-Streets-of-San-Francisco-Zipped-Shapefile/2ivi-ywmk].
-I then downloaded [QGIS|http://www.qgis.org/] and related dependencies.
+[data.sfgov.org](https://data.sfgov.org/Geography/Arterial-Streets-of-San-Francisco-Zipped-Shapefile/2ivi-ywmk).
+I then downloaded [QGIS](http://www.qgis.org/) and related dependencies.
 After some frustration, the magic step was exporting the layer via QGIS with
 the "WGS 84" coordinate system: otherwise, the GeoJSON output wasn't in
 lat/long coordinates, and the remapping was tricky.  There was also some
