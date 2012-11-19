@@ -1,11 +1,9 @@
 <!DOCYTPE html>
-<meta charset="utf-8">
 <html>
+<meta charset="utf-8">
 <title>Muni and D3</title>
-<head>
 <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/css/bootstrap.min.css">
 <script src="http://d3js.org/d3.v2.js"></script>
-</head>
 <body>
 <div class="container-fluid">
 	<h1>Muni and D3</h1>
@@ -14,9 +12,6 @@
 	<a href="http://www.nextbus.com/predictor/stopSelector.jsp?a=sf-muni">Nextbus</a> 
         and Map data from <a href="https://data.sfgov.org/Geography/Arterial-Streets-of-San-Francisco-Zipped-Shapefile/2ivi-ywmk">data.sfgov.org</a>.
 	Refreshes every 15 seconds.
-	</p>
-	<p>
-	<span class="label label-info">Beware!</span> Currently this page seems to leak browser memory like mad. Caveat emptor.
 	</p>
 	<div id="map">
 		<script src="muni.js"></script>
@@ -33,4 +28,5 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>
+</body>
 </html>
